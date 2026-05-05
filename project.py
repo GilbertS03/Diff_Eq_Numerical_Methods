@@ -1,13 +1,26 @@
 import numpy as np
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
 
+# GLOBAL CONSTANTS
 ODE = 1
 HR_ODE = 2
 HD_ODE = 3
 OS_ODE = 4
+CHANGE_VALUES = 5
+STEP_SIZE = 0.5
+NUM_STEPS = 5
+NUM_DECIMALS = 5
 QUIT = -1
+X_0 = 0
+Y_0 = 3
+MIN_NUM_STEPS = 3
+MAX_STEP_SIZE = 1
+MIN_NUM_DECIMALS = 3
 
+# ODE FUNCTIONS
 def ode_function(x, y):
+    # Initial value: y(0) = 3
+    # (2*x*y)/(1+x^2)
     num = 2*x*y
     denom = 1 + x**2
     return num/denom
@@ -15,18 +28,105 @@ def ode_function(x, y):
 def true_ode_function(x):
     return 3 * (x**2 + 1)
 
-def euler(function, step_size, starting_x, num_steps):
-    y_values = []
-    x_values = []
-    slope = 0
-    for step in range(0, num_steps):
-        pass
+# METHODS
+def euler(function, step_size, starting_x, starting_y, num_steps):
+    x = starting_x
+    y = starting_y
+    x_values = [x]
+    y_values = [y]
+    for _ in range(num_steps):
+        slope = function(x, y)
+        # Move x forward in step size
+        x = x + step_size
 
-def rk4():
-    pass
+        # Update y using the Euler step
+        y = round(y + (step_size*slope), NUM_DECIMALS)
+
+        x_values.append(x)
+        y_values.append(y)
+    return y_values
+
+def rk4(function, step_size, starting_x, starting_y, num_steps):
+    x = starting_x
+    y = starting_y
+    x_values = [x]
+    y_values = [y]
+    for _ in range(num_steps):
+        k_1 = function(x, y)
+        k_2 = function(x + (step_size/2), y + (step_size*k_1/2))
+        k_3 = function(x + (step_size/2), y + (step_size*k_2/2))
+        k_4 = function(x + step_size, y + (step_size*k_3))
+
+        # x_n+1
+        x = x + step_size
+
+        h = step_size/6
+
+        # y_n+1
+        y = round(y + h*(k_1 + 2*k_2 + 2*k_3 + k_4), NUM_DECIMALS)
+
+        x_values.append(x)
+        y_values.append(y)
+    return y_values
+
+def get_real_values(function, step_size, starting_x, num_steps):
+    x = starting_x
+    x_values = [x]
+    y = function(x)
+    y_values = [y]
+    for _ in range(num_steps):
+        x = x + step_size
+        y = function(x)
+        x_values.append(x)
+        y_values.append(y)
+    return y_values
+
+# USER STEPS, SIZE, AND DECIMAL PLACES
+def get_step_size_and_num_steps():
+    try:
+        global STEP_SIZE, NUM_STEPS, NUM_DECIMALS
+
+        STEP_SIZE = float(input(f"How small do you want the steps to be? (Smaller numbers mean more accurate results and must be less than {MAX_STEP_SIZE}): "))
+        while STEP_SIZE > MAX_STEP_SIZE:
+            print(f"Step size cannot be greater than {MAX_STEP_SIZE}, please try again")
+            STEP_SIZE = float(input(f"How small do you want the steps to be? (Smaller numbers mean more accurate results and must be less than {MAX_STEP_SIZE}): "))
+
+        NUM_STEPS = int(input(f"How many steps would you like to take: (Must be greater than {MIN_NUM_STEPS}) "))
+        while NUM_STEPS < MIN_NUM_STEPS:
+            print(f"Number of steps cannot be less than {MIN_NUM_STEPS}, please try again")
+            NUM_STEPS = int(input(f"How many steps would you like to take: (Must be greater than {MIN_NUM_STEPS}) "))
+
+        NUM_DECIMALS = int(input(f"How many decimals out would you like to go: (Must be greater than {MIN_NUM_DECIMALS}) "))
+        while NUM_DECIMALS < MIN_NUM_DECIMALS:
+            print(f"Number of decimal places cannot be less than {MIN_NUM_DECIMALS}. Please try again.")
+            NUM_DECIMALS = int(input(f"How many decimals out would you like to go: (Must be greater than {MIN_NUM_DECIMALS}) "))
+
+        print(f"Now using Step Size: {STEP_SIZE}, Number of Steps: {NUM_STEPS}, and decimal points out: {NUM_DECIMALS} ")
+    except ValueError:
+        print("Incorrect data type. Defaulting to step size = 0.5, number steps = 5")
+        STEP_SIZE = 0.5 
+        NUM_STEPS = 5
+        NUM_DECIMALS = 5
+        print(f"Now using Step Size: {STEP_SIZE}, Number of Steps: {NUM_STEPS}, and decimal points out: {NUM_DECIMALS} ")
 
 def ode():
-    pass
+    # Initial values: f(0) = 3
+    x_values = []
+    x = 0
+    x_values.append(x)
+
+    for _ in range(0, NUM_STEPS):
+        x += STEP_SIZE
+        x_values.append(x)
+    
+    euler_y_values = euler(ode_function, STEP_SIZE, X_0, Y_0, NUM_STEPS)
+    rk4_y_values = rk4(ode_function, STEP_SIZE, X_0, Y_0, NUM_STEPS)
+    real_y_values = get_real_values(true_ode_function, STEP_SIZE, X_0, NUM_STEPS)
+
+    print(f"EULER: \n{x_values}\n{euler_y_values}")
+    print(f"RK4: \n{x_values}\n{rk4_y_values}")
+    print(f"TRUE: \n{x_values}\n{real_y_values}")
+    chart_creator(x_values, euler_y_values, rk4_y_values, real_y_values)
 
 def heart_rate_ode():
     pass
@@ -37,9 +137,26 @@ def heat_dissapation_ode():
 def oscillation_ode():
     pass
 
+def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values):
+    x_points = np.array(x_values)
+    euler_y_points = np.array(euler_y_values)
+    rk4_y_points = np.array(rk4_y_values)
+    true_y_points = np.array(true_y_values)
+
+    font1 = {'family':'serif','color':'blue','size':20}
+    font2 = {'family':'serif','color':'darkred','size':15}
+
+    plt.title("ODE: (2*x*y)/(1+x^2). TRUE vs EULER vs RK4", fontdict = font1)
+
+    plt.plot(x_points, euler_y_points)
+    plt.plot(x_points, rk4_y_points)
+    plt.plot(x_points, true_y_points)
+    plt.show()
+    
 def menu():
     menu = f"{QUIT}. Quit\n{ODE}. View ODE: (dy/dx) = (2xy)/(1+x^2) with Answer: y = 3(x^2 + 1)\n" \
-    f"{HR_ODE}. View Heart Rate ODE\n{HD_ODE}. View PC Heat dissapation ODE\n{OS_ODE}. View Oscillation ODE\n"
+    f"{HR_ODE}. View Heart Rate ODE\n{HD_ODE}. View PC Heat dissapation ODE\n{OS_ODE}. View Oscillation ODE\n"\
+    f"{CHANGE_VALUES}. Change values for Number of Steps and Step size\n"
     return menu
 
 def main():
@@ -57,6 +174,8 @@ def main():
                 heat_dissapation_ode()
             elif choice == OS_ODE:
                 oscillation_ode()
+            elif choice == CHANGE_VALUES:
+                get_step_size_and_num_steps()
             else:
                 print("Not a valid choice, please try again")
         except ValueError:
