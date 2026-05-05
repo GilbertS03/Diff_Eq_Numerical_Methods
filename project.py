@@ -1,3 +1,7 @@
+# TODO Make a user gui
+# TODO Make an error chart for the functions as well
+# TODO Add a chart in the terminal to show off an the entire table
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -281,5 +285,5 @@ def main():
         except ValueError:
             print("Invalid data type, please try again")
     print("Goodbye!!!")
-    
+
 main()
