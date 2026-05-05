@@ -143,14 +143,16 @@ def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values):
     rk4_y_points = np.array(rk4_y_values)
     true_y_points = np.array(true_y_values)
 
-    font1 = {'family':'serif','color':'blue','size':20}
+    font1 = {'family':'serif','color':'blue','size':15}
     font2 = {'family':'serif','color':'darkred','size':15}
-
+    plt.figure(figsize=(8, 8))
     plt.title("ODE: (2*x*y)/(1+x^2). TRUE vs EULER vs RK4", fontdict = font1)
 
-    plt.plot(x_points, euler_y_points)
-    plt.plot(x_points, rk4_y_points)
-    plt.plot(x_points, true_y_points)
+    plt.plot(x_points, euler_y_points, color='green', label='Euler\' Line')
+    plt.plot(x_points, rk4_y_points, color='red', label='RK4 Line')
+    plt.plot(x_points, true_y_points, color='purple', label='True Line')
+    plt.legend()
+    plt.savefig('ODE_Plot.png')
     plt.show()
     
 def menu():
