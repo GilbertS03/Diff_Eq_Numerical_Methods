@@ -4,13 +4,15 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from tkinter import *
+import time
 
 # GLOBAL CONSTANTS
 # Menu Choices
 ODE = 1
 HR_ODE = 2
 HD_ODE = 3
-OS_ODE = 4
+GROWTH_AND_DECAY = 4
 CHANGE_VALUES = 5
 QUIT = -1
 X_ZERO = 0
@@ -258,32 +260,70 @@ def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values, title, 
     plt.show()
     
 def menu():
-    menu = f"{QUIT}. Quit\n{ODE}. View ODE: (dy/dx) = (2xy)/(1+x^2) with Answer: y = 3(x^2 + 1)\n" \
-    f"{HR_ODE}. View Heart Rate ODE\n{HD_ODE}. View PC Heat dissipation ODE\n{OS_ODE}. View Growth and Decay ODE\n"\
-    f"{CHANGE_VALUES}. Change values for Number of Steps and Step size\n"
-    return menu
+    menu_options= []
+    menu_options.append(f"{ODE}. View ODE: (dy/dx) = (2xy)/(1+x^2) with Answer: y = 3(x^2 + 1)")
+    menu_options.append(f"{HR_ODE}. View Heart Rate ODE")
+    menu_options.append(f"{HD_ODE}. View PC Heat dissipation ODE")
+    menu_options.append(f"{GROWTH_AND_DECAY}. View Growth and Decay ODE")
+    menu_options.append(f"{CHANGE_VALUES}. Change values for Number of Steps and Step size")
+    return menu_options
+
+def menu2():
+    options = {
+        ODE: ode,
+        HR_ODE: heart_rate_ode,
+        HD_ODE: heat_dissipation_ode,
+        GROWTH_AND_DECAY: growth_and_decay_ode,
+        CHANGE_VALUES: get_step_size_and_num_steps
+    }
+
+    root = Tk()
+    root.title("Differential Equations Graphs")
+    root.geometry("500x500")
+
+    lbl = Label(root, text="Welcome to the Differential Equations Numerical Methods Visualizer!")
+    lbl.grid(row=0, column=3)
+    lbl.place(relx=0.5, rely=0.05, anchor='center')
+
+    quit_button = Button(root, text='Quit', command=root.destroy)
+    quit_button.grid(row=20, column=10)
+    quit_button.place(relx=0.9, rely=0.9, anchor="center")
+
+    menu_options = menu()
+
+    row, col = 1, 0
+    relx, rely = 0.1, 0.1
+    for text in menu_options:
+        btn = Button(root, text=text, command=options[int(text[0])])
+        btn.grid(row=row, column=col)
+        btn.place(relx=relx, rely=rely)
+        row += 1
+        rely += 0.07
+
+    root.mainloop() 
 
 def main():
-    running = True
-    while running:
-        try:
-            choice = int(input(menu()))
-            if choice == QUIT:
-                running = False
-            elif choice == ODE:
-                ode()
-            elif choice == HR_ODE:
-                heart_rate_ode()
-            elif choice == HD_ODE:
-                heat_dissipation_ode()
-            elif choice == OS_ODE:
-                growth_and_decay_ode()
-            elif choice == CHANGE_VALUES:
-                get_step_size_and_num_steps()
-            else:
-                print("Not a valid choice, please try again")
-        except ValueError:
-            print("Invalid data type, please try again")
-    print("Goodbye!!!")
+    menu2()
+    # running = True
+    # while running:
+    #     try:
+    #         choice = int(input(menu()))
+    #         if choice == QUIT:
+    #             running = False
+    #         elif choice == ODE:
+    #             ode()
+    #         elif choice == HR_ODE:
+    #             heart_rate_ode()
+    #         elif choice == HD_ODE:
+    #             heat_dissipation_ode()
+    #         elif choice == GROWTH_DECAY:
+    #             growth_and_decay_ode()
+    #         elif choice == CHANGE_VALUES:
+    #             get_step_size_and_num_steps()
+    #         else:
+    #             print("Not a valid choice, please try again")
+    #     except ValueError:
+    #         print("Invalid data type, please try again")
+    # print("Goodbye!!!")
 
 main()
