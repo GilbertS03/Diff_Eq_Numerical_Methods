@@ -2,20 +2,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # GLOBAL CONSTANTS
+# Menu Choices
 ODE = 1
 HR_ODE = 2
 HD_ODE = 3
 OS_ODE = 4
 CHANGE_VALUES = 5
+QUIT = -1
+# Calculation Constants
 STEP_SIZE = 0.5
 NUM_STEPS = 5
 NUM_DECIMALS = 5
-QUIT = -1
-X_0 = 0
-Y_0 = 3
 MIN_NUM_STEPS = 3
 MAX_STEP_SIZE = 1
 MIN_NUM_DECIMALS = 3
+# Initial Values for ODE's
+ODE_X_0 = 0
+ODE_Y_0 = 3
+# Average heart rate recovery
+HEART_RATE_RECOVERY = .12
+HEART_RATE_REST = 60
+HEART_RATE_X_ZERO = 0
+HEART_RATE_TIME_ZERO = 170
+# PLOT VARIABLES
+ODE_TITLE = 'ODE_Plot.png'
+HEART_RATE_TITLE = 'Heart_Rate_Plot.png'
+HEAT_DISSAPTION_TITLE = 'Heat_Dissapation_Plot.png'
+OSCILLATION_TITLE = 'Oscillation_Plot.png'
 
 # ODE FUNCTIONS
 def ode_function(x, y):
@@ -27,6 +40,16 @@ def ode_function(x, y):
 
 def true_ode_function(x):
     return 3 * (x**2 + 1)
+
+def heart_rate_function(time, heart_rate):
+    # dH/dt = -k(H-H_rest)
+    # H(0) = 170 (HEAVY ACTIVITY)
+    # H_REST = 60
+    return -HEART_RATE_RECOVERY*(heart_rate - HEART_RATE_REST)
+
+def heart_rate_true_function(t):
+    # H(t) = H_rest + (H_0-H_rest)*e^(-kt)
+    return HEART_RATE_REST + (HEART_RATE_TIME_ZERO - HEART_RATE_REST)*np.exp(-HEART_RATE_RECOVERY * t)
 
 # METHODS
 def euler(function, step_size, starting_x, starting_y, num_steps):
@@ -119,17 +142,26 @@ def ode():
         x += STEP_SIZE
         x_values.append(x)
     
-    euler_y_values = euler(ode_function, STEP_SIZE, X_0, Y_0, NUM_STEPS)
-    rk4_y_values = rk4(ode_function, STEP_SIZE, X_0, Y_0, NUM_STEPS)
-    real_y_values = get_real_values(true_ode_function, STEP_SIZE, X_0, NUM_STEPS)
+    euler_y_values = euler(ode_function, STEP_SIZE, ODE_X_0, ODE_Y_0, NUM_STEPS)
+    rk4_y_values = rk4(ode_function, STEP_SIZE, ODE_X_0, ODE_Y_0, NUM_STEPS)
+    real_y_values = get_real_values(true_ode_function, STEP_SIZE, ODE_X_0, NUM_STEPS)
 
-    print(f"EULER: \n{x_values}\n{euler_y_values}")
-    print(f"RK4: \n{x_values}\n{rk4_y_values}")
-    print(f"TRUE: \n{x_values}\n{real_y_values}")
-    chart_creator(x_values, euler_y_values, rk4_y_values, real_y_values)
+    chart_creator(x_values, euler_y_values, rk4_y_values, real_y_values, ODE_TITLE)
 
 def heart_rate_ode():
-    pass
+    x_values = []
+    x = 0
+    x_values.append(x)
+
+    for _ in range(0, NUM_STEPS):
+        x += STEP_SIZE
+        x_values.append(x)
+    
+    euler_y_values = euler(heart_rate_function, STEP_SIZE, HEART_RATE_X_ZERO, HEART_RATE_TIME_ZERO, NUM_STEPS)
+    rk4_y_values = rk4(heart_rate_function, STEP_SIZE, HEART_RATE_X_ZERO, HEART_RATE_TIME_ZERO, NUM_STEPS)
+    real_y_values = get_real_values(heart_rate_true_function, STEP_SIZE, HEART_RATE_X_ZERO, NUM_STEPS)
+
+    chart_creator(x_values, euler_y_values, rk4_y_values, real_y_values, HEART_RATE_TITLE)
 
 def heat_dissapation_ode():
     pass
@@ -137,7 +169,7 @@ def heat_dissapation_ode():
 def oscillation_ode():
     pass
 
-def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values):
+def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values, title):
     x_points = np.array(x_values)
     euler_y_points = np.array(euler_y_values)
     rk4_y_points = np.array(rk4_y_values)
@@ -152,7 +184,7 @@ def chart_creator(x_values, euler_y_values, rk4_y_values, true_y_values):
     plt.plot(x_points, rk4_y_points, color='red', label='RK4 Line')
     plt.plot(x_points, true_y_points, color='purple', label='True Line')
     plt.legend()
-    plt.savefig('ODE_Plot.png')
+    plt.savefig(title)
     plt.show()
     
 def menu():
