@@ -84,7 +84,6 @@ def growth_and_decay_true_function(time):
 def euler(function, step_size, starting_x, starting_y, num_steps):
     x = starting_x
     y = starting_y
-    x_values = [x]
     y_values = [y]
     for _ in range(num_steps):
         slope = function(x, y)
@@ -94,14 +93,12 @@ def euler(function, step_size, starting_x, starting_y, num_steps):
         # Update y using the Euler step
         y = round(y + (step_size*slope), NUM_DECIMALS)
 
-        x_values.append(x)
         y_values.append(y)
     return y_values
 
 def rk4(function, step_size, starting_x, starting_y, num_steps):
     x = starting_x
     y = starting_y
-    x_values = [x]
     y_values = [y]
     for _ in range(num_steps):
         k_1 = function(x, y)
@@ -117,7 +114,6 @@ def rk4(function, step_size, starting_x, starting_y, num_steps):
         # y_n+1
         y = round(y + h*(k_1 + 2*k_2 + 2*k_3 + k_4), NUM_DECIMALS)
 
-        x_values.append(x)
         y_values.append(y)
     return y_values
 
