@@ -27,27 +27,34 @@ A Python application that demonstrates numerical methods for solving differentia
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/Diff_Eq_Numerical_Methods.git
 cd Diff_Eq_Numerical_Methods
 ```
 
 2. Create a virtual environment:
+
 ```bash
 python -m venv .venv
 ```
 
 3. Activate the virtual environment:
+
 - Windows:
+
 ```bash
 .venv\Scripts\activate
 ```
+
 - Linux/Mac:
+
 ```bash
 source .venv/bin/activate
 ```
 
 4. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -62,6 +69,7 @@ pip install -r requirements.txt
 ## Usage
 
 Run the application:
+
 ```bash
 python app.py
 ```
@@ -89,19 +97,9 @@ The GUI will open with a main menu. Select a differential equation model to solv
 ## Mathematical Background
 
 ### Euler's Method
+
 A first-order numerical procedure for solving ordinary differential equations with a given initial value. It is the most basic explicit method for numerical integration of ordinary differential equations.
 
 ### Runge-Kutta 4th Order Method
+
 A widely used method for solving differential equations numerically. It provides better accuracy than Euler's method by evaluating the derivative at multiple points within each time step.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is open source. Please check the license file for details.
