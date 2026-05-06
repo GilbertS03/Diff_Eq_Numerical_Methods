@@ -84,10 +84,24 @@ def solve_growth_decay():
     return  x_vals, euler_vals, rk4_vals, true_vals, euler_error, rk4_error, "Growth/Decay Model"
 
 def plot_solution(x, euler_y, rk4_y, true_y, euler_error, rk4_error, title):
-    plt.figure()
+    plt.figure(figsize=(8, 10))
+
+    plt.subplot(2, 1, 1)
+
     plt.plot(x, euler_y, label="Euler")
     plt.plot(x, rk4_y, label="RK4")
     plt.plot(x, true_y, label="True")
     plt.legend()
-    plt.title(title)
+    plt.title(title + "(Solution)")
+    plt.grid()
+
+    plt.subplot(2, 1, 2)
+    plt.plot(x, euler_error, label="Euler Error")
+    plt.plot(x, rk4_error, label="RK4 Error")
+
+    plt.title("Error Comparison")
+    plt.legend()
+    plt.grid()
+
+    plt.tight_layout()
     plt.show()

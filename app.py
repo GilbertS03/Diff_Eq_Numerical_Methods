@@ -36,22 +36,22 @@ class App:
     def run_ode(self):
         print("Running ODE...")
         x, e, r, t, ee, re, title = solve_ode()
-        plot_solution(x, e, r, t, title)
+        plot_solution(x, e, r, t, ee, re, title)
 
     def run_heart_rate(self):
         print("Running Heart Rate...")
         x, e, r, t, ee, re, title = solve_heart_rate()
-        plot_solution(x, e, r, t, title)
+        plot_solution(x, e, r, t, ee, re, title)
 
     def run_heat(self):
         print("Running Heat Dissipation...")
         x, e, r, t, ee, re, title = solve_heat_dissipation()
-        plot_solution(x, e, r, t, title)
+        plot_solution(x, e, r, t, ee, re, title)
 
     def run_growth(self):
         print("Running Growth/Decay...")
         x, e, r, t, ee, re, title = solve_growth_decay()
-        plot_solution(x, e, r, t, title)
+        plot_solution(x, e, r, t, ee, re, title)
 
 
 if __name__ == "__main__":
