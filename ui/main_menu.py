@@ -1,5 +1,5 @@
 from tkinter import *
-from input_pages import ChangeValuesPage
+from .input_pages import ChangeValuesPage
 
 class MainMenu(Frame):
     def __init__(self, parent, controller):
@@ -9,16 +9,16 @@ class MainMenu(Frame):
               font=("Arial", 16)).pack(pady=20)
 
         Button(self, text="Simple ODE",
-               command=controller.ode).pack(pady=5)
+               command=controller.run_ode).pack(pady=5)
 
         Button(self, text="Heart Rate Model",
-               command=controller.heart_rate_ode).pack(pady=5)
+               command=controller.run_heart_rate).pack(pady=5)
 
         Button(self, text="Heat Dissipation",
-               command=controller.heat_dissipation_ode).pack(pady=5)
+               command=controller.run_heat).pack(pady=5)
 
         Button(self, text="Growth / Decay",
-               command=controller.growth_and_decay_ode).pack(pady=5)
+               command=controller.run_growth).pack(pady=5)
 
         Button(self, text="Change Parameters",
                command=lambda: controller.show_frame("ChangeValuesPage")).pack(pady=15)

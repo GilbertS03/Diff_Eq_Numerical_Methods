@@ -24,6 +24,16 @@ class ChangeValuesPage(Frame):
         self.decimals_entry.insert(0, str(config.NUM_DECIMALS))
         self.decimals_entry.pack()
 
+        Label(self, text="Growth/Decay Initial Population").pack()
+        self.pop_entry = Entry(self)
+        self.pop_entry.insert(0, str(config.GROWTH_AND_DECAY_INIT_POP))
+        self.pop_entry.pack()
+
+        Label(self, text="Growth/Decay Rate (k)").pack()
+        self.rate_entry = Entry(self)
+        self.rate_entry.insert(0, str(config.GROWTH_AND_DECAY_RATE))
+        self.rate_entry.pack()
+
         Button(self, text="Save",
                command=self.save_values).pack(pady=10)
 
@@ -35,6 +45,9 @@ class ChangeValuesPage(Frame):
             config.STEP_SIZE = float(self.step_entry.get())
             config.NUM_STEPS = int(self.steps_entry.get())
             config.NUM_DECIMALS = int(self.decimals_entry.get())
+
+            config.GROWTH_AND_DECAY_INIT_POP = float(self.pop_entry.get())
+            config.GROWTH_AND_DECAY_RATE = float(self.rate_entry.get())
 
             print("Updated config!")
 

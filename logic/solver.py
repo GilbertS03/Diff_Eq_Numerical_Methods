@@ -41,6 +41,31 @@ def solve_heart_rate():
 
     return x_vals, euler_vals, rk4_vals, true_vals, "Heart Rate"
 
+def solve_heat_dissipation():
+    x_vals = generate_x_values()
+
+    euler_vals = euler(heat_dissipation_function, config.STEP_SIZE, 0,
+                       config.HEAT_DISSIPATION_TIME_ZERO, config.NUM_STEPS)
+
+    rk4_vals = rk4(heat_dissipation_function, config.STEP_SIZE, 0,
+                    config.HEAT_DISSIPATION_TIME_ZERO, config.NUM_STEPS)
+
+    true_vals = [heat_dissipation_true_function(x) for x in x_vals]
+
+    return  x_vals, euler_vals, rk4_vals, true_vals, "Heat Dissipation"
+
+def solve_growth_decay():
+    x_vals = generate_x_values()
+
+    euler_vals = euler(growth_and_decay_function, config.STEP_SIZE, 0,
+                       config.GROWTH_AND_DECAY_INIT_POP, config.NUM_STEPS)
+
+    rk4_vals = rk4(growth_and_decay_function, config.STEP_SIZE, 0,
+                    config.GROWTH_AND_DECAY_INIT_POP, config.NUM_STEPS)
+
+    true_vals = [growth_and_decay_true_function(x) for x in x_vals]
+
+    return  x_vals, euler_vals, rk4_vals, true_vals, "Growth/Decay Model"
 
 def plot_solution(x, euler_y, rk4_y, true_y, title):
     plt.figure()
