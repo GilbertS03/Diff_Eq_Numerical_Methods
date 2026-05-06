@@ -25,7 +25,11 @@ def solve_ode():
 
     true_vals = [true_ode_function(x) for x in x_vals]
 
-    return x_vals, euler_vals, rk4_vals, true_vals, "Simple ODE"
+    euler_error = [abs(true_vals[i] - euler_vals[i]) for i in range(len(true_vals))]
+
+    rk4_error = [abs(true_vals[i] - rk4_vals[i]) for i in range(len(true_vals))]
+
+    return x_vals, euler_vals, rk4_vals, true_vals, euler_error, rk4_error, "Simple ODE"
 
 
 def solve_heart_rate():
@@ -39,7 +43,11 @@ def solve_heart_rate():
 
     true_vals = [heart_rate_true_function(x) for x in x_vals]
 
-    return x_vals, euler_vals, rk4_vals, true_vals, "Heart Rate"
+    euler_error = [abs(true_vals[i] - euler_vals[i]) for i in range(len(true_vals))]
+
+    rk4_error = [abs(true_vals[i] - rk4_vals[i]) for i in range(len(true_vals))]
+
+    return x_vals, euler_vals, rk4_vals, true_vals, euler_error, rk4_error, "Heart Rate"
 
 def solve_heat_dissipation():
     x_vals = generate_x_values()
@@ -52,7 +60,11 @@ def solve_heat_dissipation():
 
     true_vals = [heat_dissipation_true_function(x) for x in x_vals]
 
-    return  x_vals, euler_vals, rk4_vals, true_vals, "Heat Dissipation"
+    euler_error = [abs(true_vals[i] - euler_vals[i]) for i in range(len(true_vals))]
+
+    rk4_error = [abs(true_vals[i] - rk4_vals[i]) for i in range(len(true_vals))]
+
+    return  x_vals, euler_vals, rk4_vals, true_vals, euler_error, rk4_error, "Heat Dissipation"
 
 def solve_growth_decay():
     x_vals = generate_x_values()
@@ -65,9 +77,13 @@ def solve_growth_decay():
 
     true_vals = [growth_and_decay_true_function(x) for x in x_vals]
 
-    return  x_vals, euler_vals, rk4_vals, true_vals, "Growth/Decay Model"
+    euler_error = [abs(true_vals[i] - euler_vals[i]) for i in range(len(true_vals))]
 
-def plot_solution(x, euler_y, rk4_y, true_y, title):
+    rk4_error = [abs(true_vals[i] - rk4_vals[i]) for i in range(len(true_vals))]
+
+    return  x_vals, euler_vals, rk4_vals, true_vals, euler_error, rk4_error, "Growth/Decay Model"
+
+def plot_solution(x, euler_y, rk4_y, true_y, euler_error, rk4_error, title):
     plt.figure()
     plt.plot(x, euler_y, label="Euler")
     plt.plot(x, rk4_y, label="RK4")
