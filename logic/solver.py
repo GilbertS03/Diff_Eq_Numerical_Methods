@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from . import config
 from .models import *
@@ -105,3 +106,17 @@ def plot_solution(x, euler_y, rk4_y, true_y, euler_error, rk4_error, title):
 
     plt.tight_layout()
     plt.show()
+
+def print_results_table(x, euler, rk4, true, euler_err, rk4_err):
+    data = {
+        "x": x,
+        "Euler": euler,
+        "RK4": rk4,
+        "True": true,
+        "Euler Error": euler_err,
+        "RK4 Error": rk4_err
+    }
+
+    df = pd.DataFrame(data)
+    print(df.head(10))
+    
